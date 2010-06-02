@@ -1,0 +1,10 @@
+use xide;
+drop table used_tags_map;
+drop table used_properties_map;
+drop table templates_files;
+drop table page_files;
+drop table properties_info;
+drop table tags;
+drop table templates;
+drop table applications;
+drop table pages;

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "xformsdb1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:exforms="http://www.exforms.org/exf/1-0"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xforms="http://www.w3.org/2002/xforms"
+      xmlns:xformsdb="http://www.tml.tkk.fi/2007/xformsdb"
+      xmlns:xxforms="http://orbeon.org/oxf/xml/xforms">
+	<head>
+		<title>Notes</title>
+		<meta name="keywords" content="Notes, XFormsDB" />
+		<meta name="description" content="A simple XFormsDB-based notes widget." />
+		<meta name="robots" content="all" />
+		<meta name="author" content="Markku Laine" />
+		<meta name="copyright" content="2010, XFormsDB" />
+		<link rel="stylesheet" type="text/css" href="css/reset_theme.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="css/index/index.css" media="all" />
+		<xforms:model>
+			<!-- Instances -->
+			<!-- resultsetsize instance -->
+			<xforms:instance id="resultsetsize-instance">
+				<resultsetsize xmlns="">3</resultsetsize>
+			</xforms:instance>
+			<!-- Notes instance -->
+			<xforms:instance id="notes-instance">
+				<dummy xmlns="" />
+			</xforms:instance>
+			<!-- Note instance -->
+			<xforms:instance id="note-instance" src="data/index/note_template.xml" />
+			<!-- XFormsDB request instances -->
+			<!-- Read notes request instance -->
+			<xformsdb:instance id="read-notes-request-instance">
+				<xformsdb:query datasrc="exist-data-data-source" doc="notes.xml">
+					<xformsdb:expression resource="query/index/read_notes.xq" />
+					<xformsdb:var name="resultsetsize" />
+				</xformsdb:query>
+			</xformsdb:instance>
+			<!-- Create note request instance -->
+			<xformsdb:instance id="create-note-request-instance">
+				<xformsdb:query datasrc="exist-data-data-source" doc="notes.xml">
+					<xformsdb:expression resource="query/index/create_note.xq" />
+					<xformsdb:var name="resultsetsize" />
+					<xformsdb:var name="note" />
+				</xformsdb:query>
+			</xformsdb:instance>
+			<!-- Delete note request instance -->
+			<xformsdb:instance id="delete-note-request-instance">
+				<xformsdb:query datasrc="exist-data-data-source" doc="notes.xml">
+					<xformsdb:expression resource="query/index/delete_note.xq" />
+					<xformsdb:var name="resultsetsize" />
+					<xformsdb:var name="id" />
+				</xformsdb:query>
+			</xformsdb:instance>
+			<!-- XFormsDB request submissions -->
+			<!-- Read notes request submission -->
+ 			<xformsdb:submission id="read-notes-request-submission" replace="instance" instance="notes-instance" requestinstance="read-notes-request-instance" expressiontype="all" />
+			<!-- Create note request submission -->
+ 			<xformsdb:submission id="create-note-request-submission" replace="instance" instance="notes-instance" requestinstance="create-note-request-instance" expressiontype="all" />
+			<!-- Delete note request submission -->
+ 			<xformsdb:submission id="delete-note-request-submission" replace="instance" instance="notes-instance" requestinstance="delete-note-request-instance" expressiontype="all" />
+			<!-- Reset note request submission -->
+			<xforms:submission id="reset-note-submission" replace="instance" instance="note-instance" ref="instance( 'note-instance' )" action="data/index/note_template.xml" method="get" mediatype="application/xml" encoding="UTF-8" />
+			<!-- XForms bindings -->
+			<xforms:bind nodeset="instance( 'read-notes-request-instance' )/xformsdb:var[ @name = 'resultsetsize' ]" calculate="instance( 'resultsetsize-instance' )" />
+			<xforms:bind nodeset="instance( 'create-note-request-instance' )/xformsdb:var[ @name = 'resultsetsize' ]" calculate="instance( 'resultsetsize-instance' )" />
+			<xforms:bind nodeset="instance( 'delete-note-request-instance' )/xformsdb:var[ @name = 'resultsetsize' ]" calculate="instance( 'resultsetsize-instance' )" />
+			<!-- Initialize the Web page -->
+			<xforms:send submission="read-notes-request-submission" ev:event="xforms-ready" />
+		</xforms:model>
+	</head>
+	<body>
+		<div class="index page-margins">
+			<div class="index page">
+				<div class="index header">
+					<h3><xforms:output value="'Notes'" /></h3>
+				</div>
+				<div class="index main">
+					<!-- IF clause: Check the amount of notes -->
+					<xforms:group ref=".[ count( instance( 'notes-instance' )/note ) &gt; 0 ]">
+						<table class="notetable">
+							<!-- Iterate over notes -->
+							<xforms:repeat nodeset="instance( 'notes-instance' )/note" id="notes-note-repeat">
+								<xxforms:variable name="position" select="position()"/>
+						   		<tr>
+						   			<td>
+										<xforms:output class="creationtime" ref="creationtime" xxforms:format="format-date( xs:date( . ), '[MNn] [D], [Y]', 'en', (), () )" />
+										<xforms:trigger class="delete" appearance="minimal">
+											<xforms:label><img src="resource/index/delete_16x16.png" title="Delete note" /></xforms:label>
+											<xforms:action ev:event="DOMActivate">
+												<xforms:setvalue ref="instance( 'delete-note-request-instance' )/xformsdb:var[ @name = 'id' ]" value="instance( 'notes-instance' )/note[ $position ]/@id" />
+												<xforms:send submission="delete-note-request-submission" />												
+											</xforms:action>
+										</xforms:trigger>
+										<xforms:output class="content" ref="content" />
+									</td>
+								</tr>
+		    		    	</xforms:repeat>
+	    		    	</table>
+					</xforms:group>
+					<!-- ELSE clause: Check the amount of notes -->
+					<xforms:group ref=".[ not( count( instance( 'notes-instance' )/note ) &gt; 0 ) ]">
+						<p><xforms:output value="'Sorry, no notes.'" /></p>
+					</xforms:group>
+					<h5><xforms:output value="'Add a new note'" /></h5>
+					<table class="newnotetable">
+						<xforms:group ref="instance( 'note-instance' )">
+							<xforms:action ev:event="DOMActivate">			
+								<xforms:dispatch name="DOMActivate" target="submit-trigger" />
+							</xforms:action>
+							<tr>
+								<td><xforms:output class="newnotelabel" value="'Note: '" /></td>
+								<td><xforms:input ref="content" /></td>																
+							</tr>
+						</xforms:group>
+						<tr>
+							<td>&nbsp;</td>
+							<td>
+								<xforms:trigger class="newnotetrigger" id="submit-trigger">
+									<xforms:label><xforms:output value="'Submit'" /></xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:setvalue ref="instance( 'note-instance' )/@id" value="digest( string( random( true ) ), 'MD5', 'hex' )" />
+										<xforms:setvalue ref="instance( 'note-instance' )/creationtime" value="substring( string( current-date() ), 1, 10 )" />
+										<xforms:delete context="instance( 'create-note-request-instance' )/xformsdb:var[ @name = 'note' ]" nodeset="*" />
+										<xforms:insert origin="instance( 'note-instance' )" context="instance( 'create-note-request-instance' )/xformsdb:var[ @name = 'note' ]" nodeset="*" />
+										<xforms:send submission="create-note-request-submission" />
+										<xforms:send submission="reset-note-submission" />
+									</xforms:action>
+								</xforms:trigger>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="index footer">
+					<!--<widget:xforms-instance-inspector xmlns:widget="http://orbeon.org/oxf/xml/widget" />-->
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xml:lang="en" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.tml.tkk.fi/2009/template" targetNamespace="http://www.tml.tkk.fi/2009/template"
+	xmlns:tns="http://www.tml.tkk.fi/2009/template" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:element name="webpage">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="head" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="body" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+			<xs:anyAttribute namespace="##any" processContents="skip" />
+
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="head">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:sequence>
+					<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded" />
+					<xs:any namespace="##other" processContents="skip"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="meta">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="name" type="xs:string" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="body">
+		<xs:complexType mixed="true">
+			<xs:choice maxOccurs="unbounded">
+				<xs:sequence>
+					<xs:any namespace="##other" processContents="lax" minOccurs="0"
+						maxOccurs="unbounded" />
+					<xs:element name="container" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="container">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:sequence>
+
+					<xs:any namespace="##other" processContents="lax" minOccurs="0"
+						maxOccurs="unbounded" />
+
+					<xs:element name="meta" type="containerMetaType"
+						minOccurs="0" maxOccurs="unbounded" />
+
+					<xs:element name="head" type="containerheadType"
+						minOccurs="0" maxOccurs="1" />
+
+					<xs:element name="body" type="containerBodyType"
+						minOccurs="1" maxOccurs="1" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="containerMetaType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="containerheadType" mixed="true">
+		<xs:sequence>
+			<xs:any namespace="##any" processContents="skip" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="containerBodyType" mixed="true">
+		<xs:choice maxOccurs="unbounded">
+			<xs:sequence>
+				<xs:element ref="call-component" minOccurs="0" maxOccurs="unbounded" />
+				<xs:any namespace="##other" processContents="lax" minOccurs="0"
+					maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:element name="call-component">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="with-param" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="with-param">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="name" type="xs:string" use="required" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

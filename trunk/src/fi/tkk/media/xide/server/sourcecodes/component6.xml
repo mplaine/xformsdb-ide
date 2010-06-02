@@ -1,0 +1,5 @@
+<sourcecode>
+	<range start='5' end='25' step='3'>
+		<label>range smth</label>
+	</range>
+</sourcecode>

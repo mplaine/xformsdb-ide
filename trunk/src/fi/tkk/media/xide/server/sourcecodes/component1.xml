@@ -1,0 +1,19 @@
+<sourcecode>
+		<label> Please enter your contact information:
+		</label> 
+	<input>
+		<label> Enter your username  
+		</label> 
+	</input> 
+	<input>
+		<label> Enter your password 
+		</label> 
+	</input> 
+	<input>
+		<label> Enter your email 
+		</label> 
+	</input> 
+	<submit submission="main-submission">
+		<label>login</label>
+	</submit>
+</sourcecode>

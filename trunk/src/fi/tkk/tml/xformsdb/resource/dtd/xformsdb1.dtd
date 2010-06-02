@@ -1,0 +1,7 @@
+<!ENTITY % XHTMLlat1 SYSTEM "xhtml-lat1.ent">
+%XHTMLlat1;
+<!ENTITY % XHTMLsymbol SYSTEM "xhtml-symbol.ent">
+%XHTMLsymbol;
+<!ENTITY % XHTMLspecial SYSTEM "xhtml-special.ent">
+%XHTMLspecial;
+<!ENTITY myversion "v1.1">

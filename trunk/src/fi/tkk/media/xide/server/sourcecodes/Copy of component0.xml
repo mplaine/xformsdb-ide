@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xml:lang="en" lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:exforms="http://www.exforms.org/exf/1-0"
+	xmlns:template="http://www.tml.tkk.fi/2009/template"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xforms="http://www.w3.org/2002/xforms"
+	xmlns:xformsdb="http://www.tml.tkk.fi/2007/xformsdb"
+	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms">
+	<head>
+		<title>Event Calendar v1</title>
+	</head>
+	<body>
+		<div id="webpage_-_event_calendar_v1_-_page_margins">
+					<xforms:input ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'filter' ]" incremental="true">
+							<xforms:label>Filter:</xforms:label>
+							<xforms:action ev:event="xforms-value-changed">
+								<xforms:send submission="component_-_event_calendar_v1_-_select_events_request_submission" />			
+							</xforms:action>
+						</xforms:input>
+						<h1>Event Calendar</h1>
+				</div>
+	</body>
+</html>

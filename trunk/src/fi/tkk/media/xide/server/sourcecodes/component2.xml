@@ -1,0 +1,9 @@
+<sourcecode>
+		<label> Please enter your contact information:
+		</label> 
+	<slot id = 'slot1'>
+	</slot>
+	<submit submission="main-submission">
+		<label>login</label>
+	</submit>
+</sourcecode>
