@@ -1,0 +1,12 @@
+<sourcecode>
+		<label> Please select one option:
+		</label> 
+	<select1 appearance = 'full'>
+		<item> 
+			<label>Yksi</label>
+		</item>
+		<item>
+			<label>Kaksi</label>
+		</item> 
+	</select1> 
+</sourcecode>

@@ -1,0 +1,31 @@
+<module>
+
+	<!-- Inherit the core Web Toolkit stuff.                  -->
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name='com.google.gwt.xml.XML'/>
+	<inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>s
+
+    <inherits name='com.google.gwt.widgetideas.WidgetIdeas'/>
+    <inherits name='com.google.gwt.widgetideas.ScrollTable'/>
+
+    <inherits name='com.google.gwt.gen2.table.ScrollTable'/>
+    <inherits name='com.google.gwt.gen2.table.FixedWidthFlexTable'/>
+    <inherits name='com.google.gwt.gen2.table.FixedWidthGrid'/>
+    
+   
+	<!-- <inherits name='com.sensei.themes.mytheme.Mytheme'/>-->
+	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+
+	<!-- Specify the app entry point class.                   -->
+	<entry-point class='fi.tkk.media.xide.client.Main'/>
+	
+    <!-- Example servlet loaded into hosted mode tomcat       -->
+	
+	<servlet path="/SearchService" class="fi.tkk.media.xide.server.SearchServiceImpl" />
+  	<servlet path="/UploadFile" class="fi.tkk.media.xide.server.UploadFileServlet"/>
+  	<servlet path="/DownloadFile" class="fi.tkk.media.xide.server.DownloadFileServlet"/>
+  	
+  	<stylesheet src='XIDE.css' /> 	  	 
+  	
+  	
+</module>

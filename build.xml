@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<project name="xide" basedir="." default="usage">
+	<property file="build.properties" />
+
+	<target name="usage">
+		<echo message="Available targets are:" />
+		<echo message="" />
+		<echo message="clean" />
+		<echo message="war" />
+		<echo message="" />
+	</target>
+
+	<target name="clean" description="Creates a war file">
+
+		<delete includeemptydirs="true">
+			<fileset dir="${warfolder}" includes="**/*" />
+		</delete>
+
+	</target>
+
+	<target name="war" description="Creates a war file">
+
+		<!-- JAVASCRIPT, HTML, CSS ETC. -->
+		<copy todir="${warfolder}">
+			<fileset dir="war/fi.tkk.media.xide.Main">
+				<exclude name="**/*.svn" />
+			</fileset>
+		</copy>
+
+		<!-- WEB-INF FOLDER. -->
+		<copy todir="${warfolder}/WEB-INF">
+			<fileset dir="war/WEB-INF">
+				<exclude name="**/*.svn" />
+			</fileset>
+		</copy>
+
+		<copy todir="${warfolder}/WEB-INF/classes">
+			<fileset dir="bin">
+				<exclude name="**/*.svn" />
+			</fileset>
+		</copy>
+
+		<delete file="${warfolder}/WEB-INF/lib/mysql-connector-java-5.1.7-bin.jar" />
+
+		<!-- META-INF FOLDER -->
+		<copy todir="${warfolder}/META-INF">
+			<fileset dir="war/META-INF">
+				<exclude name="**/*.svn" />
+			</fileset>
+		</copy>
+
+		<!-- WEB.XML WITH SERVER CONFIGURATION-->
+		<delete file="${warfolder}/WEB-INF/web.xml" />
+		<move file="${warfolder}/WEB-INF/testbed_web.xml" tofile="${warfolder}/WEB-INF/web.xml" />
+
+		<!-- CREATE A WAR FILE -->
+		<zip destfile="${warfolder}/xide.war" basedir="${warfolder}" />
+
+		<!-- DELETE THE CONTENT OF THE TEMP FOLDER LEAVING ONLY THE WAR FILE -->
+		<delete includeemptydirs="true">
+			<fileset dir="${warfolder}" excludes="**/*.war" defaultexcludes="false" />
+		</delete>
+
+
+	</target>
+</project>

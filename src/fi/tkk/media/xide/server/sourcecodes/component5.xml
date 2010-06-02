@@ -1,0 +1,7 @@
+<sourcecode>
+	<select appearance = 'full'>
+		<item>
+			<label>Enter your question here</label>
+		</item> 
+	</select> 
+</sourcecode>

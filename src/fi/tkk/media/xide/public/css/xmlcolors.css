@@ -1,0 +1,87 @@
+.editbox {
+  margin: .4em;
+  padding: 0;
+  font-family: monospace;
+  font-size: 10pt;
+  color: black;
+}
+
+.editbox p {
+  margin: 0;
+}
+
+span.xml-tagname {
+  color: #A0B;
+}
+
+span.xml-webpage {
+  color: #FF00FF;
+}
+
+span.xml-meta {
+     color: #F87431;   		
+}
+span.xml-body {
+     color: #254117;   		
+}
+span.xml-head {
+     color: #00FF00;   		
+}
+span.xml-container {
+     color: #F87431;   		
+}
+span.xml-call-component {
+     color: #F660AB;   		
+}
+span.xml-param {
+     color: #3B9C9C;   		
+}
+span.xml-option {
+     color: #F62817;   		
+}
+span.xml-with-param {
+     color: #7D2252;   		
+}
+span.xml-theme {
+     color: #52D017;   		
+}
+
+span.xml-component {
+     color: #FF8800;   		
+}
+
+span.xml-attribute {
+  color: #281;
+}
+
+span.xml-punctuation {
+  color: black;
+}
+
+span.xml-attname {
+  color: #00F;
+}
+
+span.xml-comment {
+  color: #A70;
+}
+
+span.xml-cdata {
+  color: #48A;
+}
+
+span.xml-processing {
+  color: #999;
+}
+
+span.xml-entity {
+  color: #A22;
+}
+
+span.xml-error {
+  color: #F00;
+}
+
+span.xml-text {
+  color: black;
+}

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:exforms="http://www.exforms.org/exf/1-0"
+	xmlns:template="http://www.tml.tkk.fi/2009/template"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xforms="http://www.w3.org/2002/xforms"
+	xmlns:xformsdb="http://www.tml.tkk.fi/2007/xformsdb"
+	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms">
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/component_-_event_calendar_v1.css" media="all" />
+		<xforms:model>
+			<!-- XForms instances -->
+			<!-- Events instance -->
+			<xforms:instance id="component_-_event_calendar_v1_-_events_instance">
+			    <dummy xmlns="" />
+			</xforms:instance>
+			<!-- Event instance -->
+			<xforms:instance id="component_-_event_calendar_v1_-_event_instance">
+			    <dummy xmlns="" />
+			</xforms:instance>
+			<!-- Util instance -->
+			<xforms:instance id="component_-_event_calendar_v1_-_util_instance">
+				<util-instance xmlns="">
+					<view />
+				</util-instance>
+			</xforms:instance>
+			<!-- Event count instance -->
+			<xforms:instance id="component_-_event_calendar_v1_-_event_count_instance">
+			    <event-count-instance xmlns="">0</event-count-instance>
+			</xforms:instance>
+			
+			<!-- XFormsDB request instances -->
+			<!-- Select events request instance -->
+			<xformsdb:instance id="component_-_event_calendar_v1_-_select_events_request_instance">
+				<xformsdb:query datasrc="exist-data-data-source" doc="events.xml">
+					<xformsdb:expression src="xq/component_-_event_calendar_v1_-_select_events.xq" />
+					<xformsdb:var name="filter" />
+					<xformsdb:var name="amount">5</xformsdb:var>
+					<xformsdb:var name="archive">false</xformsdb:var>
+				</xformsdb:query>
+			</xformsdb:instance>
+			<!-- Select event request instance -->
+			<xformsdb:instance id="component_-_event_calendar_v1_-_select_event_request_instance">
+				<xformsdb:query datasrc="exist-data-data-source" doc="events.xml">
+					<xformsdb:expression src="xq/component_-_event_calendar_v1_-_select_event.xq" />
+					<xformsdb:var name="eventid" />
+				</xformsdb:query>
+			</xformsdb:instance>
+			<!-- Select event count request instance -->
+			<xformsdb:instance id="component_-_event_calendar_v1_-_select_event_count_request_instance">
+				<xformsdb:query datasrc="exist-data-data-source" doc="events.xml">
+					<xformsdb:expression src="xq/component_-_event_calendar_v1_-_select_event_count.xq" />
+				</xformsdb:query>
+			</xformsdb:instance>	
+				
+			<!-- XFormsDB request submissions -->
+			<!-- Select events request submission -->
+			<xformsdb:submission id="component_-_event_calendar_v1_-_select_events_request_submission" replace="instance" instance="component_-_event_calendar_v1_-_events_instance" requestinstance="component_-_event_calendar_v1_-_select_events_request_instance" expressiontype="select" />
+			<!-- Select event request submission -->
+			<xformsdb:submission id="component_-_event_calendar_v1_-_select_event_request_submission" replace="instance" instance="component_-_event_calendar_v1_-_event_instance" requestinstance="component_-_event_calendar_v1_-_select_event_request_instance" expressiontype="select" />
+			<!-- Select event count request submission -->
+			<xformsdb:submission id="component_-_event_calendar_v1_-_select_event_count_request_submission" replace="instance" instance="component_-_event_calendar_v1_-_event_count_instance" requestinstance="component_-_event_calendar_v1_-_select_event_count_request_instance" expressiontype="select" />
+			
+			<!-- Initialize the web page -->
+			<xforms:send submission="component_-_event_calendar_v1_-_select_events_request_submission" ev:event="xforms-ready" />						
+			<xforms:send submission="component_-_event_calendar_v1_-_select_event_count_request_submission" ev:event="xforms-ready" />						
+		</xforms:model>
+	</head>
+	<body>
+		<div id="component_-_event_calendar_v1_-_body">
+			<table class="filter">
+				<tr class="filter">
+					<td>
+						<xforms:input ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'filter' ]" incremental="true">
+							<xforms:label>Filter:</xforms:label>
+							<xforms:action ev:event="xforms-value-changed">
+								<xforms:send submission="component_-_event_calendar_v1_-_select_events_request_submission" />			
+							</xforms:action>
+						</xforms:input>
+					</td>
+				</tr>
+			</table>
+			<!-- Show upcoming events -->
+			<xforms:group ref=".[ instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'archive' ] = 'false' ]">
+				<h3>Upcoming events</h3>
+			</xforms:group>
+			<!-- Show archive -->
+			<xforms:group ref=".[ instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'archive' ] = 'true' ]">
+				<h3>Archive</h3>
+			</xforms:group>
+			<xforms:group ref=".[ count( instance( 'component_-_event_calendar_v1_-_events_instance' )/event ) = 0 ]">
+				<p>Sorry, no events matched your search criteria.</p>
+			</xforms:group>
+			<xforms:group ref=".[ count( instance( 'component_-_event_calendar_v1_-_events_instance' )/event ) &gt; 0 ]">
+				<table class="events">
+					<xforms:repeat nodeset="instance( 'component_-_event_calendar_v1_-_events_instance' )/event" id="component_-_event_calendar_v1_-_events_event_repeat">
+						<!-- Hide event details -->
+		                <xforms:group ref=".[ not( instance( 'component_-_event_calendar_v1_-_util_instance' )/view = @xformsdb:id ) ]">
+							<tr class="title">
+								<td>
+				                	<xforms:trigger appearance="minimal">
+				                		<xforms:label><xforms:output ref="title" /></xforms:label>
+				                		<xforms:action ev:event="DOMActivate">
+				                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_util_instance' )/view" value="instance( 'component_-_event_calendar_v1_-_events_instance' )/event[ index( 'component_-_event_calendar_v1_-_events_event_repeat' ) ]/@xformsdb:id" />
+				                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_event_request_instance' )/xformsdb:var[ @name = 'eventid' ]" value="instance( 'component_-_event_calendar_v1_-_util_instance' )/view" />
+											<xforms:send submission="component_-_event_calendar_v1_-_select_event_request_submission" />
+				                		</xforms:action>
+				                	</xforms:trigger>
+				                </td>
+				            </tr>
+				            <tr class="date date_hide">
+				            	<td>
+				                	<xforms:group ref=".[ startdate = enddate ]"><xforms:output ref="startdate" xxforms:format="format-dateTime( xs:dateTime( . ), '[MNn] [D], [Y]', 'en', (), () )" /></xforms:group>
+				                	<xforms:group ref=".[ not( startdate = enddate ) ]"><xforms:output ref="startdate" xxforms:format="format-dateTime( xs:dateTime( . ), '[MNn] [D], [Y]', 'en', (), () )" style="margin-right: -20px;" /> -	<xforms:output ref="enddate" xxforms:format="format-dateTime( xs:dateTime( . ), '[MNn] [D], [Y]', 'en', (), () )" /></xforms:group>
+				                </td>
+							</tr>
+		                </xforms:group>
+		                <!-- Show event details -->
+		                <xforms:group ref=".[ instance( 'component_-_event_calendar_v1_-_util_instance' )/view = @xformsdb:id ]">
+			                <xforms:group ref="instance( 'component_-_event_calendar_v1_-_event_instance' )">
+			                	<tr class="title">
+			                		<td>
+					                	<xforms:trigger appearance="minimal">
+					                		<xforms:label><xforms:output ref="title" /></xforms:label>
+					                		<xforms:action ev:event="DOMActivate">
+					                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_util_instance' )/view" value="''" />
+					                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_event_request_instance' )/xformsdb:var[ @name = 'eventid' ]" value="''" />
+					                		</xforms:action>
+					                	</xforms:trigger>
+					                </td>
+					            </tr>
+					            <tr class="date date_show">
+					            	<td>
+					                	<xforms:group ref=".[ startdate = enddate ]"><xforms:output ref="startdate" xxforms:format="format-dateTime( xs:dateTime( . ), '[MNn] [D], [Y]', 'en', (), () )" /></xforms:group>
+					                	<xforms:group ref=".[ not( startdate = enddate ) ]"><xforms:output ref="startdate" xxforms:format="format-dateTime( xs:dateTime( . ), '[MNn] [D], [Y]', 'en', (), () )" style="margin-right: -20px;" /> -	<xforms:output ref="enddate" xxforms:format="format-dateTime( xs:dateTime( . ), '[MNn] [D], [Y]', 'en', (), () )" /></xforms:group>
+					                </td>
+					            </tr>
+					            <tr class="description">
+					            	<td><xforms:output ref="description" /></td>
+								</tr>
+							</xforms:group>
+			        	</xforms:group>
+					</xforms:repeat>
+				</table>
+			</xforms:group>
+			<xforms:group ref=".[ instance( 'component_-_event_calendar_v1_-_event_count_instance' ) &gt; 0 ]">
+				<table class="archive">
+					<tr class="archive">
+						<td>
+							<!-- Show archive -->
+							<xforms:group ref=".[ instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'archive' ] = 'false' ]">
+								<!-- Show more events -->
+								<xforms:group ref=".[ not( instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'amount' ] = '' ) ]">
+				                	<xforms:trigger appearance="minimal">
+				                		<xforms:label>More</xforms:label>
+				                		<xforms:action ev:event="DOMActivate">
+					                		<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'amount' ]" value="''" />
+											<xforms:send submission="component_-_event_calendar_v1_-_select_events_request_submission" />
+				                		</xforms:action>
+				                	</xforms:trigger>
+				                </xforms:group>
+								<!-- Show less events -->
+								<xforms:group ref=".[ instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'amount' ] = '' ]">
+				                	<xforms:trigger appearance="minimal">
+				                		<xforms:label>Less</xforms:label>
+				                		<xforms:action ev:event="DOMActivate">
+					                		<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'amount' ]" value="'5'" />
+											<xforms:send submission="component_-_event_calendar_v1_-_select_events_request_submission" />
+				                		</xforms:action>
+				                	</xforms:trigger>
+				                </xforms:group>
+			                	
+			                	<xforms:trigger appearance="minimal">
+			                		<xforms:label>Archive</xforms:label>
+			                		<xforms:action ev:event="DOMActivate">
+			                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'amount' ]" value="''" />
+			                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'archive' ]" value="'true'" />
+										<xforms:send submission="component_-_event_calendar_v1_-_select_events_request_submission" />
+			                		</xforms:action>
+			                	</xforms:trigger>
+			                </xforms:group>
+							<!-- Show upcoming events -->
+							<xforms:group ref=".[ instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'archive' ] = 'true' ]">
+			                	<xforms:trigger appearance="minimal">
+			                		<xforms:label>Upcoming events</xforms:label>
+			                		<xforms:action ev:event="DOMActivate">
+			                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'amount' ]" value="'5'" />
+			                			<xforms:setvalue ref="instance( 'component_-_event_calendar_v1_-_select_events_request_instance' )/xformsdb:var[ @name = 'archive' ]" value="'false'" />
+										<xforms:send submission="component_-_event_calendar_v1_-_select_events_request_submission" />
+			                		</xforms:action>
+			                	</xforms:trigger>
+							</xforms:group>
+						</td>
+					</tr>						
+				</table>
+			</xforms:group>
+		</div>	
+	</body>
+</html>

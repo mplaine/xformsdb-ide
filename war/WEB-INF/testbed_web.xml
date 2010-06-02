@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>xide</display-name>
+
+	<!-- Standard Action Servlet Configuration -->
+	<servlet>
+
+		<servlet-name>remoteLoggingServiceImpl</servlet-name>
+
+		<servlet-class>com.google.gwt.libideas.logging.server.RemoteLoggingServiceImpl</servlet-class>
+
+	</servlet>
+
+
+	<servlet-mapping>
+
+		<servlet-name>remoteLoggingServiceImpl</servlet-name>
+
+		<url-pattern>/logging</url-pattern>
+
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>searchServiceImpl</servlet-name>
+		<servlet-class>fi.tkk.media.xide.server.SearchServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>searchServiceImpl</servlet-name>
+		<url-pattern>/SearchService</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>uploadFileServlet</servlet-name>
+		<servlet-class>fi.tkk.media.xide.server.UploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>uploadFileServlet</servlet-name>
+		<url-pattern>/UploadFile</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+  		<servlet-name>downloadFileServlet</servlet-name>
+  		<servlet-class>fi.tkk.media.xide.server.DownloadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>downloadFileServlet</servlet-name>
+  		<url-pattern>/DownloadFile</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>remoteLoggingService</servlet-name>
+		<servlet-class>com.google.gwt.gen2.logging.server.RemoteLoggingService</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>remoteLoggingService</servlet-name>
+		<url-pattern>/logging</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- Welcome File List -->
+	<welcome-file-list>
+		<welcome-file>Main.html</welcome-file>
+	</welcome-file-list>
+
+	<listener>
+		<listener-class>fi.tkk.media.xide.server.ContextListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>Log4JInitServlet</servlet-name>
+		<servlet-class>fi.tkk.media.xide.util.Log4JInitServlet</servlet-class>
+		<init-param>
+			<param-name>log4j-properties</param-name>
+			<param-value>/WEB-INF/classes/log4j.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>Config</servlet-name>
+		<servlet-class>fi.tkk.media.xide.server.Config</servlet-class>
+		<init-param>
+			<param-name>properties-file</param-name>
+			<param-value>/WEB-INF/constants.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<resource-ref>
+		<description>DB Connection</description>
+		<res-ref-name>jdbc/xidedb</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+</web-app>
